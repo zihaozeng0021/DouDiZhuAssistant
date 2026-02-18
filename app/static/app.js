@@ -104,7 +104,7 @@ function buildRankGrid() {
 function renderStateEnvelope(envelope) {
   const state = envelope.state;
   currentState = state;
-  currentRecommendation = envelope.recommendation ? envelope.recommendation.cards : null;
+  currentRecommendation = envelope.recommendation ? envelope.recommendation.text : null;
 
   gameCard.classList.remove("hidden");
   document.getElementById("game-id").textContent = envelope.game_id;
@@ -120,7 +120,7 @@ function renderStateEnvelope(envelope) {
   if (envelope.recommendation) {
     document.getElementById("recommend-text").textContent = envelope.recommendation.text;
   } else if (envelope.recommendation_error) {
-    document.getElementById("recommend-text").textContent = `不可用: ${envelope.recommendation_error}`;
+    document.getElementById("recommend-text").textContent = `Unavailable: ${envelope.recommendation_error}`;
   } else {
     document.getElementById("recommend-text").textContent = "-";
   }
@@ -136,22 +136,22 @@ function renderStateEnvelope(envelope) {
   }
   if (state.action_log.length === 0) {
     const li = document.createElement("li");
-    li.textContent = "暂无动作";
+    li.textContent = "No actions yet";
     historyList.appendChild(li);
   }
 
   if (state.game_over) {
-    setMessage(`对局结束，胜方: ${state.winner}`);
+    setMessage(`Game over. Winner: ${state.winner}`);
   } else if (state.need_user_action) {
-    setMessage("轮到你出牌。");
+    setMessage("Your turn.");
   } else {
-    setMessage("请录入其他玩家动作。");
+    setMessage("Please input opponents' action.");
   }
 }
 
 async function postAction(action, sourceMode) {
   if (!gameId) {
-    setMessage("请先开始对局。");
+    setMessage("Please start a game first.");
     return;
   }
   try {
@@ -164,7 +164,7 @@ async function postAction(action, sourceMode) {
     resetClickCounts();
   } catch (err) {
     if (err && err.validation_error) {
-      setMessage(`动作无效: ${err.validation_error}`);
+      setMessage(`Invalid action: ${err.validation_error}`);
       if (err.state) {
         renderStateEnvelope({
           ok: true,
@@ -177,7 +177,7 @@ async function postAction(action, sourceMode) {
       }
       return;
     }
-    setMessage(`提交失败: ${JSON.stringify(err)}`);
+    setMessage(`Submit failed: ${JSON.stringify(err)}`);
   }
 }
 
@@ -197,7 +197,7 @@ startForm.addEventListener("submit", async (event) => {
     gameId = data.game_id;
     renderStateEnvelope(data);
   } catch (err) {
-    setMessage(`开局失败: ${err.error || JSON.stringify(err)}`);
+    setMessage(`Start failed: ${err.error || JSON.stringify(err)}`);
   }
 });
 
@@ -209,7 +209,7 @@ document.getElementById("submit-action-btn").addEventListener("click", async () 
   if (activeInputMode() === "text") {
     const raw = actionTextInput.value.trim();
     if (!raw) {
-      setMessage("请输入动作，或点击 PASS。");
+      setMessage("Enter an action, or click PASS.");
       return;
     }
     await postAction(raw, "text");
@@ -224,7 +224,7 @@ document.getElementById("pass-btn").addEventListener("click", async () => {
 
 document.getElementById("use-recommend-btn").addEventListener("click", async () => {
   if (!currentRecommendation) {
-    setMessage("当前没有可用推荐。");
+    setMessage("No recommendation available.");
     return;
   }
   await postAction(currentRecommendation, "recommend");
@@ -232,7 +232,7 @@ document.getElementById("use-recommend-btn").addEventListener("click", async () 
 
 document.getElementById("undo-btn").addEventListener("click", async () => {
   if (!gameId) {
-    setMessage("请先开始对局。");
+    setMessage("Please start a game first.");
     return;
   }
   try {
@@ -242,7 +242,7 @@ document.getElementById("undo-btn").addEventListener("click", async () => {
     });
     renderStateEnvelope(data);
   } catch (err) {
-    setMessage(`撤销失败: ${err.error || JSON.stringify(err)}`);
+    setMessage(`Undo failed: ${err.error || JSON.stringify(err)}`);
   }
 });
 

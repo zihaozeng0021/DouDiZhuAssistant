@@ -6,6 +6,7 @@ from collections import Counter
 from typing import Any
 
 VALID_CARDS = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 20, 30}
+MAX_COUNT_PER_RANK = 4
 
 TEXT_TO_CARD = {
     "3": 3,
@@ -101,6 +102,7 @@ def parse_action_text(text: str) -> list[int]:
     if not tokens:
         return []
     cards = [TEXT_TO_CARD[token] for token in tokens]
+    validate_cards_max_four(cards, "action")
     cards.sort()
     return cards
 
@@ -127,6 +129,7 @@ def parse_action_click(counts: dict[str, Any]) -> list[int]:
 
         cards.extend([TEXT_TO_CARD[key]] * count)
 
+    validate_cards_max_four(cards, "action")
     cards.sort()
     return cards
 
@@ -135,7 +138,6 @@ def parse_action_payload(payload: Any) -> list[int]:
     """
     Parse action payload in one of formats:
     - "3344", "PASS"
-    - [3, 3, 4, 4]
     - {"3": 2, "4": 2}
     - {"counts": {"3": 2, "4": 2}}
     - {"type": "pass"}
@@ -146,29 +148,14 @@ def parse_action_payload(payload: Any) -> list[int]:
     if isinstance(payload, str):
         return parse_action_text(payload)
 
-    if isinstance(payload, list):
-        cards = []
-        for idx, item in enumerate(payload):
-            try:
-                card = int(item)
-            except (TypeError, ValueError) as exc:
-                raise ParseError(f"Action list index {idx} is not an integer.") from exc
-            if card not in VALID_CARDS:
-                raise ParseError(f"Unsupported card value: {card}")
-            cards.append(card)
-        cards.sort()
-        return cards
-
     if isinstance(payload, dict):
         if str(payload.get("type", "")).lower() == "pass":
             return []
         if "counts" in payload:
             return parse_action_click(payload["counts"])
-        if "cards" in payload and isinstance(payload["cards"], list):
-            return parse_action_payload(payload["cards"])
         return parse_action_click(payload)
 
-    raise ParseError("Unsupported action payload format.")
+    raise ParseError("Unsupported action payload format. Use text like '3344'/'PASS' or click counts object.")
 
 
 def parse_hand_payload(payload: Any, field_name: str) -> list[int]:
@@ -178,7 +165,16 @@ def parse_hand_payload(payload: Any, field_name: str) -> list[int]:
         raise ParseError(f"{field_name} cannot be empty/PASS.")
     if any(card not in VALID_CARDS for card in cards):
         raise ParseError(f"{field_name} contains unsupported cards.")
+    validate_cards_max_four(cards, field_name)
     return cards
+
+
+def validate_cards_max_four(cards: list[int], field_name: str) -> None:
+    counter = Counter(cards)
+    for card, count in counter.items():
+        if count > MAX_COUNT_PER_RANK:
+            symbol = CARD_TO_TEXT.get(card, str(card))
+            raise ParseError(f"{field_name} rank '{symbol}' exceeds {MAX_COUNT_PER_RANK} cards ({count}).")
 
 
 def validate_cards_not_exceed_deck(cards: list[int], field_name: str) -> None:
@@ -197,4 +193,3 @@ def action_to_text(action: list[int]) -> str:
 
 def actions_to_text(actions: list[list[int]]) -> list[str]:
     return [action_to_text(action) for action in actions]
-

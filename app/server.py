@@ -52,7 +52,7 @@ def _recommendation_payload(state: GameState) -> tuple[dict[str, Any] | None, st
     try:
         infoset = state.build_infoset_for_user()
         action = models.recommend(infoset)
-        return {"cards": action, "text": action_to_text(action)}, None
+        return {"text": action_to_text(action)}, None
     except ModelBridgeError as exc:
         logger.exception("Model recommendation failed: %s", exc)
         return None, str(exc)
@@ -167,4 +167,3 @@ def undo_action(game_id: str):
 if __name__ == "__main__":
     logger.info("Starting server on http://127.0.0.1:7860")
     app.run(host="127.0.0.1", port=7860, debug=False)
-

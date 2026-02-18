@@ -256,25 +256,19 @@ class GameState:
         return {
             "user_role": self.user_role,
             "acting_role": self.acting_role,
-            "my_hand_cards": list(self.my_hand_cards),
             "my_hand_text": action_to_text(self.my_hand_cards),
             "num_cards_left_dict": dict(self.num_cards_left_dict),
-            "played_cards": {role: list(cards) for role, cards in self.played_cards.items()},
             "played_cards_text": {role: action_to_text(cards) for role, cards in self.played_cards.items()},
-            "last_move_dict": {role: list(action) for role, action in self.last_move_dict.items()},
             "last_move_dict_text": {role: action_to_text(action) for role, action in self.last_move_dict.items()},
-            "card_play_action_seq": [list(action) for action in self.card_play_action_seq],
             "card_play_action_seq_text": [action_to_text(action) for action in self.card_play_action_seq],
             "bomb_num": self.bomb_num,
             "last_pid": self.last_pid,
-            "three_landlord_cards": list(self.three_landlord_cards),
             "three_landlord_cards_text": action_to_text(self.three_landlord_cards),
             "game_over": self.game_over,
             "winner": self.winner,
             "need_user_action": self.need_user_action(),
             "action_log": [
-                {"step": i + 1, "actor": entry["actor"], "action": list(entry["action"]), "text": action_to_text(entry["action"])}
+                {"step": i + 1, "actor": entry["actor"], "text": action_to_text(entry["action"])}
                 for i, entry in enumerate(self.action_log)
             ],
         }
-
