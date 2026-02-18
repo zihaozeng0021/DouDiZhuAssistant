@@ -167,7 +167,8 @@ button:hover {
   margin: 0;
   padding-left: 18px;
   max-height: 230px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #message-box {
