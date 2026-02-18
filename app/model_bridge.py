@@ -32,11 +32,12 @@ class ModelRegistry:
 
         try:
             import torch
-            from douzero.dmc.models import model_dict
             from douzero.env.env import get_obs
+            from .model_defs import model_dict
         except Exception as exc:  # pragma: no cover - runtime dependency
             raise ModelBridgeError(
-                "DouZero dependencies are missing. Please install requirements (`pip install -r requirements.txt`)."
+                "DouZero runtime is not ready. Please run start.bat again or install requirements "
+                f"(`pip install -r requirements.txt`). Root cause: {exc}"
             ) from exc
 
         self.torch = torch
@@ -91,4 +92,3 @@ class ModelRegistry:
         values = y_pred.detach().cpu().numpy()
         best_action_index = values.argmax(axis=0)[0]
         return legal_actions[int(best_action_index)]
-
