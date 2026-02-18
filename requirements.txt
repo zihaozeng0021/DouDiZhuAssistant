@@ -1,0 +1,5 @@
+flask>=3.0,<4
+torch
+douzero==1.1.0
+pytest>=8.0,<9
+

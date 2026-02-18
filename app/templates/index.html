@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DouZero Web Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>DouZero 出牌助手</h1>
+
+    <section class="card" id="setup-card">
+      <h2>开局配置</h2>
+      <form id="start-form">
+        <label>
+          你的身份
+          <select id="role-select" required>
+            <option value="landlord">landlord 地主</option>
+            <option value="landlord_down">landlord_down 下家农民</option>
+            <option value="landlord_up">landlord_up 上家农民</option>
+          </select>
+        </label>
+
+        <label>
+          你的手牌（文本，例如：33445510JQKA2XD）
+          <input id="my-hand-input" type="text" required placeholder="输入17/20张">
+        </label>
+
+        <label>
+          底牌（3张，例如：X2A）
+          <input id="landlord-cards-input" type="text" required placeholder="输入3张底牌">
+        </label>
+
+        <button type="submit">开始对局</button>
+      </form>
+    </section>
+
+    <section class="card hidden" id="game-card">
+      <h2>对局</h2>
+
+      <div class="status-grid">
+        <div><strong>Game ID:</strong> <span id="game-id">-</span></div>
+        <div><strong>当前行动方:</strong> <span id="acting-role">-</span></div>
+        <div><strong>你的身份:</strong> <span id="user-role">-</span></div>
+        <div><strong>炸弹数:</strong> <span id="bomb-num">0</span></div>
+        <div><strong>你的手牌:</strong> <span id="my-hand">-</span></div>
+        <div><strong>底牌剩余:</strong> <span id="three-landlord-cards">-</span></div>
+      </div>
+
+      <div class="status-grid">
+        <div><strong>地主剩余:</strong> <span id="left-landlord">20</span></div>
+        <div><strong>下家剩余:</strong> <span id="left-landlord-down">17</span></div>
+        <div><strong>上家剩余:</strong> <span id="left-landlord-up">17</span></div>
+      </div>
+
+      <div id="recommend-box" class="recommend">
+        <strong>推荐:</strong> <span id="recommend-text">-</span>
+        <button id="use-recommend-btn" type="button">按推荐出牌</button>
+      </div>
+
+      <div class="actions">
+        <h3>录入出牌</h3>
+        <label class="inline-radio">
+          <input type="radio" name="input-mode" value="text" checked>
+          文本输入
+        </label>
+        <label class="inline-radio">
+          <input type="radio" name="input-mode" value="click">
+          点选输入
+        </label>
+
+        <div id="text-input-panel">
+          <input id="action-text-input" type="text" placeholder="例如: 3344 / PASS / 10JQK">
+        </div>
+
+        <div id="click-input-panel" class="hidden">
+          <div class="rank-grid" id="rank-grid"></div>
+          <div class="click-actions">
+            <button id="clear-click-btn" type="button">清空点选</button>
+            <span>当前点选: <strong id="click-preview">PASS</strong></span>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="submit-action-btn" type="button">提交动作</button>
+          <button id="pass-btn" type="button">不出 (PASS)</button>
+          <button id="undo-btn" type="button">撤销一步</button>
+        </div>
+      </div>
+
+      <div class="history">
+        <h3>回合历史</h3>
+        <ul id="history-list"></ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>消息</h2>
+      <pre id="message-box">等待开始...</pre>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
+

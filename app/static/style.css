@@ -1,0 +1,177 @@
+:root {
+  --bg: #f4f2ec;
+  --surface: #fffdf8;
+  --text: #182126;
+  --muted: #4d5b64;
+  --brand: #a93f18;
+  --border: #d8cfbf;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Noto Sans SC", sans-serif;
+  background: radial-gradient(circle at top right, #f7e9cc 0%, var(--bg) 50%);
+  color: var(--text);
+}
+
+.container {
+  width: min(980px, 95vw);
+  margin: 24px auto 40px;
+}
+
+h1 {
+  margin: 0 0 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+label {
+  display: block;
+  margin: 10px 0;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 10px;
+  border: 1px solid #b9c1c7;
+  border-radius: 8px;
+}
+
+button {
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 8px 14px;
+  margin-bottom: 10px;
+}
+
+.recommend {
+  background: #faeee8;
+  border: 1px solid #e9d0c5;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inline-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.inline-radio input {
+  margin: 0;
+  width: auto;
+}
+
+.rank-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rank-cell {
+  border: 1px solid #c9d1d8;
+  border-radius: 8px;
+  padding: 6px;
+  text-align: center;
+  background: #f8fafb;
+}
+
+.rank-cell .value {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.rank-cell .counter {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.rank-cell .counter button {
+  min-width: 28px;
+  padding: 3px 0;
+  background: #2f4758;
+  border-color: #2f4758;
+}
+
+.click-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.button-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.history ul,
+#history-list {
+  margin: 0;
+  padding-left: 18px;
+  max-height: 230px;
+  overflow: auto;
+}
+
+#message-box {
+  white-space: pre-wrap;
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .container {
+    margin-top: 12px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+}
+
