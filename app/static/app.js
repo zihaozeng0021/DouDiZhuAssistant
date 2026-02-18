@@ -102,10 +102,13 @@ function buildRankGrid() {
   }
 }
 
-function renderStateEnvelope(envelope) {
+function renderStateEnvelope(envelope, options = {}) {
+  const preserveMessage = Boolean(options.preserveMessage);
   const state = envelope.state;
   currentState = state;
-  currentRecommendation = envelope.recommendation ? envelope.recommendation.text : null;
+  if (Object.prototype.hasOwnProperty.call(envelope, "recommendation")) {
+    currentRecommendation = envelope.recommendation ? envelope.recommendation.text : null;
+  }
 
   gameCard.classList.remove("hidden");
   document.getElementById("game-id").textContent = envelope.game_id;
@@ -141,12 +144,14 @@ function renderStateEnvelope(envelope) {
     historyList.appendChild(li);
   }
 
-  if (state.game_over) {
-    setMessage(`Game over. Winner: ${state.winner}`);
-  } else if (state.need_user_action) {
-    setMessage("Your turn.");
-  } else {
-    setMessage("Please input opponents' action.");
+  if (!preserveMessage) {
+    if (state.game_over) {
+      setMessage(`Game over. Winner: ${state.winner}`);
+    } else if (state.need_user_action) {
+      setMessage("Your turn.");
+    } else {
+      setMessage("Please input opponents' action.");
+    }
   }
 }
 
@@ -165,17 +170,17 @@ async function postAction(action, sourceMode) {
     resetClickCounts();
   } catch (err) {
     if (err && err.validation_error) {
-      setMessage(`Invalid action: ${err.validation_error}`);
       if (err.state) {
         renderStateEnvelope({
           ok: true,
           game_id: gameId,
           state: err.state,
-          recommendation: null,
-          recommendation_error: null,
+          recommendation: err.recommendation,
+          recommendation_error: err.recommendation_error,
           need_user_action: err.state.need_user_action,
-        });
+        }, { preserveMessage: true });
       }
+      setMessage(`Invalid action: ${err.validation_error}`);
       return;
     }
     setMessage(`Submit failed: ${JSON.stringify(err)}`);

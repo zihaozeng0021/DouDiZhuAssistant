@@ -123,11 +123,14 @@ def get_state(game_id: str):
 
 @app.route("/api/game/<game_id>/action", methods=["POST"])
 def submit_action(game_id: str):
+    source_mode = "text"
+    raw_action: Any = None
     try:
         state = _get_game_or_error(game_id)
         body = request.get_json(force=True, silent=False) or {}
         source_mode = str(body.get("source_mode", "text"))
-        action = parse_action_payload(body.get("action"))
+        raw_action = body.get("action")
+        action = parse_action_payload(raw_action)
         state.apply_action(action)
         logger.info(
             "Action game=%s actor=%s action=%s source_mode=%s",
@@ -139,10 +142,20 @@ def submit_action(game_id: str):
         return _response_with_state(game_id, state)
     except (ParseError, ValidationError) as exc:
         state = sessions.get(game_id)
+        recommendation, recommendation_error = _recommendation_payload(state) if state is not None else (None, None)
+        logger.warning(
+            "Invalid action game=%s source_mode=%s action=%r error=%s",
+            game_id,
+            source_mode,
+            raw_action,
+            exc,
+        )
         response = {
             "ok": False,
             "validation_error": str(exc),
             "state": state.snapshot() if state else None,
+            "recommendation": recommendation,
+            "recommendation_error": recommendation_error,
         }
         return jsonify(response), 400
     except Exception as exc:  # pragma: no cover
