@@ -248,6 +248,17 @@ document.getElementById("undo-btn").addEventListener("click", async () => {
   }
 });
 
+document.getElementById("restart-config-btn").addEventListener("click", () => {
+  gameId = null;
+  currentState = null;
+  currentRecommendation = null;
+  actionTextInput.value = "";
+  resetClickCounts();
+  gameCard.classList.add("hidden");
+  setupCard.classList.remove("hidden");
+  setMessage("请重新配置开局信息。");
+});
+
 document.getElementById("clear-click-btn").addEventListener("click", resetClickCounts);
 
 window.addEventListener("beforeunload", (event) => {
