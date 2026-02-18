@@ -59,7 +59,7 @@ class GameState:
         if config.user_role not in ROLE_ORDER:
             raise ValidationError(f"Unsupported role: {config.user_role}")
 
-        expected_count = 20 if config.user_role == "landlord" else 17
+        expected_count = 17
         if len(config.initial_my_hand) != expected_count:
             raise ValidationError(
                 f"Role '{config.user_role}' expects {expected_count} cards in my_hand, got {len(config.initial_my_hand)}."
@@ -69,14 +69,7 @@ class GameState:
             raise ValidationError("three_landlord_cards must contain exactly 3 cards.")
 
         known_counter = Counter(config.initial_my_hand)
-        if config.user_role == "landlord":
-            landlord_counter = Counter(config.initial_three_landlord_cards)
-            for card, count in landlord_counter.items():
-                if count > known_counter[card]:
-                    text = action_to_text([card] * count)
-                    raise ValidationError(f"Bottom cards must be part of landlord hand; check {text}.")
-        else:
-            known_counter.update(config.initial_three_landlord_cards)
+        known_counter.update(config.initial_three_landlord_cards)
 
         for card, count in known_counter.items():
             if count > DECK_COUNTER[card]:
@@ -86,6 +79,10 @@ class GameState:
         self.user_role: Role = self.config.user_role
         self.acting_role: Role = "landlord"
         self.my_hand_cards: list[int] = list(self.config.initial_my_hand)
+        if self.user_role == "landlord":
+            # Landlord starts with 17 hand cards and receives 3 bottom cards.
+            self.my_hand_cards.extend(self.config.initial_three_landlord_cards)
+            self.my_hand_cards.sort()
         self.three_landlord_cards: list[int] = list(self.config.initial_three_landlord_cards)
         self.card_play_action_seq: list[list[int]] = []
         self.played_cards: dict[Role, list[int]] = {role: [] for role in ROLE_ORDER}

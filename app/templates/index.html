@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DouZero Web Assistant</title>
+  <title>斗地主出牌助手</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="container">
-    <h1>DouZero 出牌助手</h1>
+    <h1>斗地主出牌助手</h1>
 
     <section class="card" id="setup-card">
       <h2>开局配置</h2>
@@ -23,8 +23,8 @@
         </label>
 
         <label>
-          你的手牌（文本，例如：33445510JQKA2XD）
-          <input id="my-hand-input" type="text" required placeholder="输入17/20张">
+          你的手牌（17张，例如：33445510JQKA2XD）
+          <input id="my-hand-input" type="text" required placeholder="输入17张手牌">
         </label>
 
         <label>
@@ -95,7 +95,7 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="message-card">
       <h2>消息</h2>
       <pre id="message-box">等待开始...</pre>
     </section>

@@ -7,6 +7,7 @@ const clickCounts = Object.fromEntries(RANKS.map((rank) => [rank, 0]));
 
 const messageBox = document.getElementById("message-box");
 const gameCard = document.getElementById("game-card");
+const setupCard = document.getElementById("setup-card");
 const startForm = document.getElementById("start-form");
 const historyList = document.getElementById("history-list");
 const actionTextInput = document.getElementById("action-text-input");
@@ -195,6 +196,7 @@ startForm.addEventListener("submit", async (event) => {
       body: JSON.stringify(payload),
     });
     gameId = data.game_id;
+    setupCard.classList.add("hidden");
     renderStateEnvelope(data);
   } catch (err) {
     setMessage(`Start failed: ${err.error || JSON.stringify(err)}`);
@@ -258,4 +260,3 @@ window.addEventListener("beforeunload", (event) => {
 buildRankGrid();
 syncInputModePanels();
 updateClickPreview();
-

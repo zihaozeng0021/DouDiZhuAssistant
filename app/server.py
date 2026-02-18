@@ -97,7 +97,7 @@ def start_game():
 
         validate_cards_not_exceed_deck(my_hand, "my_hand")
         validate_cards_not_exceed_deck(landlord_cards, "landlord_cards")
-        combined = my_hand + ([] if role == "landlord" else landlord_cards)
+        combined = my_hand + landlord_cards
         validate_cards_not_exceed_deck(combined, "combined known cards")
 
         state = GameState.create(role, my_hand, landlord_cards)

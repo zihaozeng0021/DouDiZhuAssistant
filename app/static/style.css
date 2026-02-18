@@ -11,6 +11,13 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", "Noto Sans SC", sans-serif;
@@ -19,12 +26,17 @@ body {
 }
 
 .container {
-  width: min(980px, 95vw);
-  margin: 24px auto 40px;
+  width: 100vw;
+  height: 100vh;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
 }
 
 h1 {
-  margin: 0 0 18px;
+  margin: 0;
 }
 
 .card {
@@ -32,7 +44,6 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
-  margin-bottom: 14px;
 }
 
 .hidden {
@@ -156,7 +167,7 @@ button:hover {
   margin: 0;
   padding-left: 18px;
   max-height: 230px;
-  overflow: auto;
+  overflow: hidden;
 }
 
 #message-box {
@@ -165,13 +176,22 @@ button:hover {
   color: var(--muted);
 }
 
+#game-card {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#message-card {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 640px) {
   .container {
-    margin-top: 12px;
+    padding: 10px;
   }
 
   .card {
     padding: 12px;
   }
 }
-

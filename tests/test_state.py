@@ -7,10 +7,12 @@ from app.engine.state import GameState, ValidationError
 def test_state_apply_and_undo():
     state = GameState.create(
         "landlord",
-        parse_action_text("33334444556678910JQXD"),
-        parse_action_text("3XD"),
+        parse_action_text("33334444556678910J"),
+        parse_action_text("QXD"),
     )
 
+    assert len(state.my_hand_cards) == 20
+    assert state.num_cards_left_dict["landlord"] == 20
     assert state.need_user_action() is True
     state.apply_action(parse_action_text("5"))  # user landlord leads
     assert state.acting_role == "landlord_down"
@@ -35,3 +37,12 @@ def test_opponent_cannot_pass_when_leading():
     # First turn is landlord, not user.
     with pytest.raises(ValidationError):
         state.apply_action([])
+
+
+def test_landlord_must_input_17_hand_cards():
+    with pytest.raises(ValidationError):
+        GameState.create(
+            "landlord",
+            parse_action_text("33334444556678910JQXD"),
+            parse_action_text("3XD"),
+        )
