@@ -15,6 +15,13 @@ cd "$SCRIPT_DIR" || exit 1
 VENV_DIR=".venv"
 PYTHON_EXE="$VENV_DIR/bin/python"
 
+if [[ -x "$PYTHON_EXE" ]]; then
+  if ! "$PYTHON_EXE" -c "import sys" >/dev/null 2>&1; then
+    echo "Existing virtual environment is incompatible. Recreating..."
+    rm -rf "$VENV_DIR" || pause_and_exit "Failed to remove old virtual environment directory: $VENV_DIR"
+  fi
+fi
+
 if [[ ! -x "$PYTHON_EXE" ]]; then
   echo "[1/5] Creating virtual environment..."
   if command -v python3 >/dev/null 2>&1; then

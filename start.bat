@@ -5,6 +5,21 @@ cd /d %~dp0
 set "VENV_DIR=.venv"
 set "PYTHON_EXE=%VENV_DIR%\Scripts\python.exe"
 
+if exist "%PYTHON_EXE%" (
+  "%PYTHON_EXE%" -c "import sys" >nul 2>nul
+  if errorlevel 1 (
+    echo Existing virtual environment is incompatible. Recreating...
+    if exist "%VENV_DIR%" (
+      rmdir /s /q "%VENV_DIR%"
+      if exist "%VENV_DIR%" (
+        echo Failed to remove old virtual environment directory: %VENV_DIR%
+        pause
+        exit /b 1
+      )
+    )
+  )
+)
+
 if not exist "%PYTHON_EXE%" (
   echo [1/5] Creating virtual environment...
   where py >nul 2>nul
