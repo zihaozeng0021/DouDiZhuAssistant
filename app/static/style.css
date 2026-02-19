@@ -23,7 +23,8 @@ html,
 body {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 body {
@@ -49,6 +50,7 @@ body::before {
 .container {
   width: min(1260px, 100%);
   height: 100vh;
+  height: 100dvh;
   margin: 0 auto;
   padding: clamp(14px, 2.4vw, 28px);
   display: flex;
@@ -331,20 +333,14 @@ button:disabled:hover {
 
 .history {
   margin-top: 12px;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+  flex: 0 0 auto;
+  display: block;
 }
 
 #history-list {
   margin: 0;
   padding-left: 18px;
-  max-height: none;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 #history-list li {
@@ -374,7 +370,19 @@ button:disabled:hover {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+#setup-card {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 #message-card {
