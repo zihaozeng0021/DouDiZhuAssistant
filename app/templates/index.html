@@ -16,9 +16,9 @@
         <label>
           你的身份
           <select id="role-select" required>
-            <option value="landlord">landlord 地主</option>
-            <option value="landlord_down">landlord_down 下家农民</option>
-            <option value="landlord_up">landlord_up 上家农民</option>
+            <option value="landlord">地主</option>
+            <option value="landlord_down">下家农民</option>
+            <option value="landlord_up">上家农民</option>
           </select>
         </label>
 
@@ -40,7 +40,6 @@
       <h2>对局</h2>
 
       <div class="status-grid">
-        <div><strong>Game ID:</strong> <span id="game-id">-</span></div>
         <div><strong>当前行动方:</strong> <span id="acting-role">-</span></div>
         <div><strong>你的身份:</strong> <span id="user-role">-</span></div>
         <div><strong>炸弹数:</strong> <span id="bomb-num">0</span></div>
@@ -71,7 +70,7 @@
         </label>
 
         <div id="text-input-panel">
-          <input id="action-text-input" type="text" placeholder="例如: 3344 / PASS / 10JQK">
+          <input id="action-text-input" type="text" placeholder="例如: 33/PASS/34567">
         </div>
 
         <div id="click-input-panel" class="hidden">
