@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import logging
+import sys
+import threading
 import uuid
+import webbrowser
 from pathlib import Path
 from typing import Any
 
@@ -13,9 +16,33 @@ from .engine.parser import ParseError, action_to_text, parse_action_payload, par
 from .engine.state import GameState, ValidationError
 from .model_bridge import ModelBridgeError, ModelRegistry
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
+
+HOST = "127.0.0.1"
+PORT = 7860
+
+
+def _is_frozen() -> bool:
+    return bool(getattr(sys, "frozen", False))
+
+
+def _bundle_root() -> Path:
+    if _is_frozen():
+        mei_root = getattr(sys, "_MEIPASS", None)
+        if mei_root:
+            return Path(mei_root)
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parent.parent
+
+
+def _runtime_root() -> Path:
+    if _is_frozen():
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parent.parent
+
+
+ROOT_DIR = _bundle_root()
 CKPT_DIR = ROOT_DIR / "douzero_WP"
-LOG_DIR = ROOT_DIR / "logs"
+LOG_DIR = _runtime_root() / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -177,6 +204,20 @@ def undo_action(game_id: str):
         return _json_error(f"Failed to undo: {exc}", status=500)
 
 
+def run_server(auto_open_browser: bool = False) -> None:
+    if auto_open_browser:
+        url = f"http://{HOST}:{PORT}"
+
+        def _open_browser() -> None:
+            webbrowser.open(url)
+
+        timer = threading.Timer(1.0, _open_browser)
+        timer.daemon = True
+        timer.start()
+
+    logger.info("Starting server on http://%s:%s", HOST, PORT)
+    app.run(host=HOST, port=PORT, debug=False)
+
+
 if __name__ == "__main__":
-    logger.info("Starting server on http://127.0.0.1:7860")
-    app.run(host="127.0.0.1", port=7860, debug=False)
+    run_server(auto_open_browser=False)
