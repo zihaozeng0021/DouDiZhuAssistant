@@ -30,3 +30,8 @@ On Linux, launch it by `start.sh`.
 - Each turn, it provides a recommended move based on your setup and action history for reference.
 
 </details>
+
+
+![alt text](image.png)
+
+![alt text](image-1.png)
