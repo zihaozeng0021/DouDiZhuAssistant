@@ -111,7 +111,6 @@ function renderStateEnvelope(envelope, options = {}) {
   }
 
   gameCard.classList.remove("hidden");
-  document.getElementById("game-id").textContent = envelope.game_id;
   document.getElementById("acting-role").textContent = state.acting_role;
   document.getElementById("user-role").textContent = state.user_role;
   document.getElementById("bomb-num").textContent = String(state.bomb_num);
