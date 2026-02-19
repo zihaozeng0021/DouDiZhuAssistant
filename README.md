@@ -7,7 +7,8 @@
 
 模型采用 DouZero。  
 
-Windows 双击 `start.bat` 启动。
+Windows 双击 `start.bat` 启动。  
+Linux通过 `start.sh` 启动。
 
 - 开局填写身份、手牌和底牌，进入对局辅助。
 - 每轮会根据开局配置与出牌历史给出建议出牌作为参考。
@@ -22,7 +23,8 @@ A lightweight DouDiZhu assistant project that helps you make faster and more rel
 
 Powered by DouZero.  
 
-On Windows, launch it by double-clicking `start.bat`.
+On Windows, launch it by `start.bat`.  
+On Linux, launch it by `start.sh`.
 
 - At the start, enter your role, hand cards, and landlord cards to begin the assistant.
 - Each turn, it provides a recommended move based on your setup and action history for reference.
