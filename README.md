@@ -1,5 +1,7 @@
 # 斗地主助手 / DouDiZhu Assistant
 
+注意：卡牌A请填a或A,而非1；卡牌10请填10；小王请填x或X；大王请填d或D。
+
 <details>
 <summary><strong>简短介绍(简体中文)</strong></summary>
 
