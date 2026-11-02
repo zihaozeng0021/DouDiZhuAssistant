@@ -55,7 +55,7 @@ class ModelRegistry:
 
         model = self._model_dict[position]()
         model_state_dict = model.state_dict()
-        pretrained = self.torch.load(str(ckpt), map_location=self.device)
+        pretrained = self.torch.load(str(ckpt), map_location=self.device, weights_only=True)
         pretrained = {key: value for key, value in pretrained.items() if key in model_state_dict}
         model_state_dict.update(pretrained)
         model.load_state_dict(model_state_dict)
